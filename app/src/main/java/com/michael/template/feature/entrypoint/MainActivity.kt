@@ -34,6 +34,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.michael.template.core.base.contract.ViewEvent
 import com.michael.template.core.base.model.Ignored
@@ -52,7 +53,7 @@ import com.michael.template.feature.mainscreen.contract.MainSideEffect
 import com.michael.template.feature.mainscreen.contract.MainViewAction
 import com.michael.template.feature.mainscreen.model.MenuAnimation
 import com.michael.template.feature.mainscreen.model.MenuState
-import com.michael.template.navigation.Destinations
+import com.michael.template.navigation.Destination
 import com.michael.template.navigation.NavigationGraph
 import com.michael.template.navigation.navigator
 import com.michael.template.navigation.processNavigation
@@ -137,7 +138,7 @@ class MainActivity : ComponentActivity() {
                     }
                     else -> snap()
                 }
-            }, label = "",) {
+            }, label = "") {
                 when (it) {
                     MenuState.EXPANDED -> Offset(EXPANDED_OFFSET_X, EXPANDED_OFFSET_Y)
                     MenuState.COLLAPSED -> Offset(0f, 0f)
@@ -154,7 +155,7 @@ class MainActivity : ComponentActivity() {
                     }
                     else -> snap()
                 }
-            }, label = "",) {
+            }, label = "") {
                 when (it) {
                     MenuState.EXPANDED -> ALPHA_MENU_EXPANDED
                     MenuState.COLLAPSED -> ALPHA_MENU_COLLAPSED
@@ -171,7 +172,7 @@ class MainActivity : ComponentActivity() {
                     }
                     else -> snap()
                 }
-            }, label = "",) {
+            }, label = "") {
                 when (it) {
                     MenuState.EXPANDED -> ROUNDNESS_EXPANDED.dp
                     MenuState.COLLAPSED -> 0.dp
@@ -194,7 +195,7 @@ class MainActivity : ComponentActivity() {
                     }
                     else -> snap()
                 }
-            }, label = "",) {
+            }, label = "") {
                 when (it) {
                     MenuState.EXPANDED -> Offset(0f, 0f)
                     MenuState.COLLAPSED -> Offset(MENU_OFFSET_COLLAPSED_X, 0f)
@@ -236,8 +237,13 @@ class MainActivity : ComponentActivity() {
             MultiMateTheme {
                 Column {
                     if (state.isCollapsed) {
+                        val title = navController
+                            .currentBackStackEntryAsState()
+                            .value?.destination?.route
+                            ?: Destination.Home.title
+
                         ToolBar(
-                            title = state.currentDestination.title,
+                            title = title,
                             toggleVisibility = {
                                 mainScreenViewModel.onViewAction(MainViewAction.ToggleMenuVisibility)
                             },
@@ -258,25 +264,19 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-
-    @Deprecated("Deprecated in Java")
-    override fun onBackPressed() {
-        super.onBackPressed()
-        mainScreenViewModel.onViewAction(MainViewAction.OnBackClicked)
-    }
 }
 
 @Suppress("composableNaming")
 @Composable
 private fun subscribeToSideEffects(
     events: () -> Flow<ViewEvent>,
-    navigateToDestinations: (Destinations) -> Unit,
+    navigateToDestinations: (Destination) -> Unit,
 ) {
     events().collectAsEffect { viewEvent ->
         when (viewEvent) {
             is ViewEvent.Effect -> when (val target = viewEvent.effect) {
                 is MainSideEffect.NavigateToDestination -> {
-                    navigator(target.destinations, navigateToDestinations)
+                    navigator(target.destination, navigateToDestinations)
                 }
             }
 
