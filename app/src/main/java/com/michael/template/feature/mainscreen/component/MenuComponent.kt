@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -16,12 +17,16 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.IntOffset
 import com.michael.template.R
 import com.michael.template.core.base.model.ImmutableList
 import com.michael.template.core.ui.components.Spacer
@@ -30,9 +35,10 @@ import com.michael.template.core.ui.theme.Dimens.Padding40
 import com.michael.template.core.ui.theme.Dimens.size50
 import com.michael.template.core.ui.theme.Dimens.textSize24
 import com.michael.template.navigation.Destinations
+import kotlin.math.roundToInt
 
 @Composable
-fun MenuComponent(
+private fun MenuComponent(
     modifier: Modifier,
     destinationClicked: (Destinations) -> Unit,
     destinations: ImmutableList<Destinations>,
@@ -86,14 +92,26 @@ fun MenuComponent(
             icon = Icons.Filled.Close,
             title = "Logout",
         ) { destinationClicked(Destinations.HOME) }
-
-//        // app version
-//        Text(
-//            text = "App version: ${BuildConfig.VERSION_NAME}",
-//            color = Color.White.copy(alpha = .4f),
-//            fontSize = 16.sp,
-//            modifier = Modifier.padding(start = 16.dp),
-//            fontWeight = FontWeight.Medium,
-//        )
     }
+}
+
+@Composable
+fun MenuComponentWrapper(
+    menuOffset: State<Offset>,
+    alphaMenu: Float,
+    destinations: ImmutableList<Destinations>,
+    destinationClicked: (Destinations) -> Unit,
+) {
+    MenuComponent(
+        Modifier
+            .offset {
+                IntOffset(
+                    menuOffset.value.x.roundToInt(),
+                    menuOffset.value.y.roundToInt(),
+                )
+            }
+            .alpha(alphaMenu),
+        destinationClicked = destinationClicked,
+        destinations,
+    )
 }
