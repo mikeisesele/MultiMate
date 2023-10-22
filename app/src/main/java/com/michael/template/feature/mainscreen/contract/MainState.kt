@@ -12,7 +12,7 @@ data class MainState(
     override val errorState: MessageState? = null,
     val currentMenuState: MenuState = MenuState.COLLAPSED,
     val screens: ImmutableList<Destinations> = emptyImmutableList(),
-    val currentDestination: Destinations = Destinations.HOME
+    val currentDestination: Destinations = Destinations.HOME,
 ) : BaseState {
     companion object {
         val initialState = MainState()
