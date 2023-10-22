@@ -1,8 +1,9 @@
 package com.michael.template.navigation
 
-fun navigator(destination: Destinations, navigateToDestination: (Destinations) -> Unit) {
+fun navigator(destination: Destination, navigateToDestination: (Destination) -> Unit) {
     when (destination) {
-        Destinations.HOME -> navigateToDestination(Destinations.HOME)
-        Destinations.SETTINGS -> navigateToDestination(Destinations.SETTINGS)
+        Destination.Home -> navigateToDestination(Destination.Home)
+        Destination.Setting -> navigateToDestination(Destination.Setting)
+        Destination.PasswordGenerator -> navigateToDestination(Destination.PasswordGenerator)
     }
 }

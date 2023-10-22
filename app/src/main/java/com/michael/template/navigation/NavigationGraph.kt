@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.michael.template.feature.generatepassword.PasswordGenerator
 import com.michael.template.feature.home.HomeScreen
 import com.michael.template.feature.settings.Settings
 
@@ -12,24 +13,27 @@ import com.michael.template.feature.settings.Settings
 fun NavigationGraph(navController: NavHostController) {
     NavHost(
         navController = navController,
-        startDestination = Destinations.HOME.title,
+        startDestination = Destination.Home.title,
     ) {
-        composable(route = Destinations.HOME.title) {
-            HomeScreen()
-        }
-        composable(route = Destinations.SETTINGS.title) {
-            Settings()
-        }
+        composable(route = Destination.Home.title) { HomeScreen() }
+        composable(route = Destination.Setting.title) { Settings() }
+        composable(route = Destination.PasswordGenerator.title) { PasswordGenerator() }
     }
 }
 
 @SuppressLint("RestrictedApi")
-fun NavHostController.processNavigation(destinations: Destinations) {
+fun NavHostController.processNavigation(destination: Destination) {
     val doesStackContainDestination = currentBackStack.value.find { backStack ->
-        backStack.destination.route != null && backStack.destination.route!!.contains(destinations.title)
+        backStack.destination.route != null && backStack.destination.route!!.contains(destination.title)
     } != null
 
-    if (!doesStackContainDestination && destinations != Destinations.HOME) {
-        navigate(destinations.title)
+    if (!doesStackContainDestination && destination != Destination.Home) {
+        navigate(destination.title)
+    } else if (doesStackContainDestination) {
+        navigate(destination.title) {
+            popUpTo(destination.title) {
+                inclusive = false
+            }
+        }
     }
 }

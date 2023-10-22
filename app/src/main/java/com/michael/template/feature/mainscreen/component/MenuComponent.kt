@@ -28,20 +28,20 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.IntOffset
 import com.michael.template.R
-import com.michael.template.core.base.model.ImmutableList
+import com.michael.template.core.base.util.ImmutableList
 import com.michael.template.core.ui.components.Spacer
 import com.michael.template.core.ui.theme.Dimens.Padding16
 import com.michael.template.core.ui.theme.Dimens.Padding40
 import com.michael.template.core.ui.theme.Dimens.size50
 import com.michael.template.core.ui.theme.Dimens.textSize24
-import com.michael.template.navigation.Destinations
+import com.michael.template.navigation.Destination
 import kotlin.math.roundToInt
 
 @Composable
 private fun MenuComponent(
     modifier: Modifier,
-    destinationClicked: (Destinations) -> Unit,
-    destinations: ImmutableList<Destinations>,
+    destinationClicked: (Destination) -> Unit,
+    destinations: ImmutableList<Destination>,
 ) {
     Column(modifier = modifier.padding(Padding16), verticalArrangement = Arrangement.Center) {
         Spacer(vertical = Padding40)
@@ -85,13 +85,13 @@ private fun MenuComponent(
         MenuItem(
             icon = Icons.Filled.Settings,
             title = "Settings",
-        ) { destinationClicked(Destinations.SETTINGS) }
+        ) { destinationClicked(Destination.Setting) }
 
         // logout
         MenuItem(
             icon = Icons.Filled.Close,
             title = "Logout",
-        ) { destinationClicked(Destinations.HOME) }
+        ) { destinationClicked(Destination.PasswordGenerator) }
     }
 }
 
@@ -99,8 +99,8 @@ private fun MenuComponent(
 fun MenuComponentWrapper(
     menuOffset: State<Offset>,
     alphaMenu: Float,
-    destinations: ImmutableList<Destinations>,
-    destinationClicked: (Destinations) -> Unit,
+    destinations: ImmutableList<Destination>,
+    destinationClicked: (Destination) -> Unit,
 ) {
     MenuComponent(
         Modifier
