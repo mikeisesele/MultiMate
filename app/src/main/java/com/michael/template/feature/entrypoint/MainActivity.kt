@@ -55,7 +55,6 @@ import com.michael.template.feature.mainscreen.model.MenuState
 import com.michael.template.navigation.Destinations
 import com.michael.template.navigation.NavigationGraph
 import com.michael.template.navigation.navigator
-import com.michael.template.navigation.processNavigation
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.Flow
 
@@ -91,7 +90,7 @@ class MainActivity : ComponentActivity() {
             subscribeToSideEffects(
                 events = mainScreenViewModel::events,
                 navigateToDestinations = {
-                    navController.processNavigation(it)
+                    mainScreenViewModel.onViewAction(MainViewAction.ProcessNavigation(navController, it))
                 },
             )
 

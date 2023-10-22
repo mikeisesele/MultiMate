@@ -1,5 +1,6 @@
 package com.michael.template.feature.mainscreen
 
+import androidx.navigation.NavController
 import com.michael.template.core.base.contract.BaseViewModel
 import com.michael.template.core.base.contract.ViewEvent
 import com.michael.template.core.base.model.toImmutableList
@@ -31,6 +32,10 @@ class MainScreenViewModel @Inject constructor(
         when (viewAction) {
             MainViewAction.ToggleMenuVisibility -> toggleMenu()
             MainViewAction.OnBackClicked -> navigate(Destinations.HOME)
+            is MainViewAction.ProcessNavigation -> processNavigation(
+                viewAction.navHostController,
+                viewAction.destination,
+            )
             is MainViewAction.DestinationClicked -> navigate(viewAction.destination)
         }
     }
@@ -55,6 +60,16 @@ class MainScreenViewModel @Inject constructor(
                     MenuState.COLLAPSED -> MenuState.EXPANDED
                 },
             )
+        }
+    }
+
+    private fun processNavigation(navController: NavController, destinations: Destinations) {
+        val doesStackContainDestination = navController.currentBackStack.value.find { backStack ->
+            backStack.destination.route != null && backStack.destination.route!!.contains(destinations.title)
+        } != null
+
+        if (!doesStackContainDestination && destinations != Destinations.HOME) {
+            navController.navigate(destinations.title)
         }
     }
 }
