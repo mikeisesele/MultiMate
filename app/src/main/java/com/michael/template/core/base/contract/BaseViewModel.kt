@@ -3,7 +3,7 @@ package com.michael.template.core.base.contract
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.nb.benefitspro.core.base.providers.DispatcherProvider
+import com.michael.template.core.base.providers.DispatcherProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.channels.Channel
