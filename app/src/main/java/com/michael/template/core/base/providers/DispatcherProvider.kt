@@ -1,4 +1,4 @@
-package com.nb.benefitspro.core.base.providers
+package com.michael.template.core.base.providers
 
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers

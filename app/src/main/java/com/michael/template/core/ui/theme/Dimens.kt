@@ -9,22 +9,24 @@ object Dimens {
     val ButtonRadius = 100.dp
     val TopAppBarHeight = 64.dp
 
-    val PaddingSixteenth = 1.dp
+    val Padding1 = 1.dp
     val PaddingEighth = 2.dp
     val PaddingFourth = 4.dp
-    val PaddingHalf = 8.dp
+    val Padding8 = 8.dp
     val PaddingTwoThirds = 12.dp
-    val PaddingDefault = 16.dp
+    val Padding16 = 16.dp
     val PaddingDefaultOneFourths = 20.dp
-    val PaddingDoubleThreeFourths = 24.dp
+    val Padding24 = 24.dp
     val PaddingDouble = 32.dp
     val PaddingTriple = 48.dp
+    val Padding40 = 40.dp
 
     val RadiusDefault = 4.dp
     val RadiusDouble = 8.dp
     val RadiusTriple = 12.dp
     val RadiusQuadruple = 16.dp
     val RadiusFull = 28.dp
+    val Radius20 = 20.dp
 
     val SimpleProductCardHeight = 216.dp
     val SimpleProductCardWidth = 160.dp
@@ -43,7 +45,7 @@ object Dimens {
 
     val IconTiny = 14.dp
     val IconSmall = 18.dp
-    val IconSizeDefault = 24.dp
+    val IconSize24 = 24.dp
     val IconMedium = 28.dp
     val IconSizeLarge = 32.dp
     val IconSizeExtraLarge = 36.dp
@@ -58,4 +60,12 @@ object Dimens {
     val ToolBarElevationHalf = 4.dp
 
     val HeaderTextSize = 34.sp
+
+    val offset50 = 50.dp
+
+    val textSize16 = 16.sp
+    val textSize24 = 24.sp
+
+    val size50 = 50.dp
+    val size24 = 24.dp
 }
