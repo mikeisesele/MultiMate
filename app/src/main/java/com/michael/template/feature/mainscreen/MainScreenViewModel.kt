@@ -2,7 +2,6 @@ package com.michael.template.feature.mainscreen
 
 import com.michael.template.core.base.contract.BaseViewModel
 import com.michael.template.core.base.contract.ViewEvent
-import com.michael.template.core.base.model.toImmutableList
 import com.michael.template.core.base.providers.DispatcherProvider
 import com.michael.template.feature.mainscreen.contract.MainSideEffect
 import com.michael.template.feature.mainscreen.contract.MainState

@@ -2,8 +2,8 @@ package com.michael.template.feature.mainscreen.contract
 
 import com.michael.template.core.base.contract.BaseState
 import com.michael.template.core.base.model.MessageState
-import com.michael.template.feature.mainscreen.model.MenuState
 import com.michael.template.core.base.util.ImmutableList
+import com.michael.template.feature.mainscreen.model.MenuState
 import com.michael.template.navigation.Destination
 import com.michael.template.navigation.destinations
 

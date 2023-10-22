@@ -138,7 +138,7 @@ class MainActivity : ComponentActivity() {
                     }
                     else -> snap()
                 }
-            }, label = "") {
+            }, label = "",) {
                 when (it) {
                     MenuState.EXPANDED -> Offset(EXPANDED_OFFSET_X, EXPANDED_OFFSET_Y)
                     MenuState.COLLAPSED -> Offset(0f, 0f)
@@ -155,7 +155,7 @@ class MainActivity : ComponentActivity() {
                     }
                     else -> snap()
                 }
-            }, label = "") {
+            }, label = "",) {
                 when (it) {
                     MenuState.EXPANDED -> ALPHA_MENU_EXPANDED
                     MenuState.COLLAPSED -> ALPHA_MENU_COLLAPSED
@@ -172,7 +172,7 @@ class MainActivity : ComponentActivity() {
                     }
                     else -> snap()
                 }
-            }, label = "") {
+            }, label = "",) {
                 when (it) {
                     MenuState.EXPANDED -> ROUNDNESS_EXPANDED.dp
                     MenuState.COLLAPSED -> 0.dp
@@ -195,7 +195,7 @@ class MainActivity : ComponentActivity() {
                     }
                     else -> snap()
                 }
-            }, label = "") {
+            }, label = "",) {
                 when (it) {
                     MenuState.EXPANDED -> Offset(0f, 0f)
                     MenuState.COLLAPSED -> Offset(MENU_OFFSET_COLLAPSED_X, 0f)
