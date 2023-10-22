@@ -14,7 +14,7 @@ fun WhiteSurroundingBox(content: @Composable BoxScope.() -> Unit) {
     Box(
         modifier = Modifier
             .background(color = Color.White)
-            .padding(Dimens.PaddingHalf),
+            .padding(Dimens.Padding8),
     ) {
         content()
     }
