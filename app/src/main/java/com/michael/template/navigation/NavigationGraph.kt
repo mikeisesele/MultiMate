@@ -21,3 +21,13 @@ fun NavigationGraph(navController: NavHostController) {
         }
     }
 }
+
+fun NavHostController.processNavigation(destinations: Destinations) {
+    val doesStackContainDestination = currentBackStack.value.find { backStack ->
+        backStack.destination.route != null && backStack.destination.route!!.contains(destinations.title)
+    } != null
+
+    if (!doesStackContainDestination && destinations != Destinations.HOME) {
+        navigate(destinations.title)
+    }
+}
