@@ -1,12 +1,16 @@
 package com.michael.template.core.network
 
+import com.michael.template.core.network.exceptions.GeneralApiException
 import com.michael.template.core.network.model.RetrofitApiError
-import com.nb.benefitspro.core.network.data.model.exceptions.GeneralApiException
-import com.nb.benefitspro.core.network.data.model.exceptions.UnauthorizedException
 import com.squareup.moshi.JsonAdapter
 import retrofit2.HttpException
 import retrofit2.Response
 import java.io.IOException
+import java.net.HttpURLConnection.HTTP_BAD_GATEWAY
+import java.net.HttpURLConnection.HTTP_BAD_REQUEST
+import java.net.HttpURLConnection.HTTP_CLIENT_TIMEOUT
+import java.net.HttpURLConnection.HTTP_FORBIDDEN
+import java.net.HttpURLConnection.HTTP_NOT_FOUND
 import java.net.HttpURLConnection.HTTP_UNAUTHORIZED
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -31,14 +35,14 @@ class BaseApi @Inject constructor(
             return apiResult(response)
         } catch (e: Exception) {
             when (e) {
-                is IOException -> ApiResult.Failure(e) // Network error
+                is IOException -> ApiResult.NetworkFailure(e) // Network error
                 is HttpException -> { // Unexpected non-2xx error
                     e.response()?.let {
-                        ApiResult.Failure(e, it.errorBody()?.string())
-                    } ?: ApiResult.Failure(e)
+                        ApiResult.NetworkFailure(e)
+                    } ?: ApiResult.NetworkFailure(e)
                 }
 
-                else -> ApiResult.Failure(e) // Unknown Error
+                else -> ApiResult.NetworkFailure(e) // Unknown Error
             }
         }
     }
@@ -48,12 +52,16 @@ class BaseApi @Inject constructor(
             response.isSuccessful && response.body() != null -> ApiResult.Success(response.body()!!)
             else -> {
                 val errorMessage = parseErrorMessage(response)
-                when (response.code()) {
-                    HTTP_UNAUTHORIZED -> {
-                        return ApiResult.Failure(UnauthorizedException(), errorMessage)
-                    }
+                val failureMessage = when (response.code()) {
+                    HTTP_UNAUTHORIZED -> "Unauthorized"
+                    HTTP_BAD_REQUEST -> "Bad request"
+                    HTTP_FORBIDDEN -> "Forbidden"
+                    HTTP_BAD_GATEWAY -> "Bad gateway"
+                    HTTP_CLIENT_TIMEOUT -> "Client timeout"
+                    HTTP_NOT_FOUND -> "Not Found"
+                    else -> GeneralApiException(errorMessage).message
                 }
-                ApiResult.Failure(GeneralApiException(errorMessage), errorMessage)
+                ApiResult.Failure(response.code(), failureMessage)
             }
         }
     }

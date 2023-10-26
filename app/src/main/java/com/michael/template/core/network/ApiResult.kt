@@ -2,13 +2,15 @@ package com.michael.template.core.network
 
 import android.util.Log
 import com.nb.benefitspro.core.network.data.model.exceptions.DataContentNullException
+import org.jetbrains.kotlin.builtins.StandardNames.FqNames.throwable
 
 /**
  * A sealed wrapper class to wrap the results of all API calls
  */
-sealed class ApiResult<out T> {
-    class Success<out T>(val data: T) : ApiResult<T>()
-    class Failure(val throwable: Throwable, val message: String? = null) : ApiResult<Nothing>()
+sealed interface ApiResult<out T> {
+    class Success<out T>(val data: T) : ApiResult<T>
+    class Failure(val code: Int, val message: String? = null) : ApiResult<Nothing>
+    class NetworkFailure<out T>(val throwable: Throwable) : ApiResult<T>
 }
 
 inline fun <T> ApiResult<T>.whenSuccess(block: (result: T) -> Unit): ApiResult<T> {
@@ -28,7 +30,7 @@ fun <T> ApiResult<T>.unwrap(): T {
 }
 
 inline fun <T> ApiResult<T>.whenError(block: (error: Throwable) -> Unit): ApiResult<T> {
-    if (this is ApiResult.Failure) {
+    if (this is ApiResult.NetworkFailure) {
         block(this.throwable)
     }
     return this
@@ -37,13 +39,18 @@ inline fun <T> ApiResult<T>.whenError(block: (error: Throwable) -> Unit): ApiRes
 inline fun <T, R> ApiResult<T>.map(mapper: (T) -> R): ApiResult<R> =
     when (this) {
         is ApiResult.Success -> ApiResult.Success(mapper(data))
-        is ApiResult.Failure -> ApiResult.Failure(ApiFailureException(this.throwable))
+        is ApiResult.Failure -> ApiResult.Failure(code, message)
+        is ApiResult.NetworkFailure -> ApiResult.NetworkFailure(ApiFailureException(originalException = throwable))
     }
 
 inline fun <T, R> ApiResult<T>.mapWithFallback(mapper: (T) -> R, fallback: () -> R): ApiResult<R> =
     when (this) {
         is ApiResult.Success -> ApiResult.Success(mapper(data))
         is ApiResult.Failure -> {
+            Log.e(this.toString(), "ApiResult was Failure with: $throwable, fallback called")
+            ApiResult.Success(fallback())
+        }
+        is ApiResult.NetworkFailure -> {
             Log.e(this.toString(), "ApiResult was Failure with: $throwable, fallback called")
             ApiResult.Success(fallback())
         }

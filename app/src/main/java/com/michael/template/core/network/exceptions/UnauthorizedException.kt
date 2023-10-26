@@ -1,3 +1,3 @@
-package com.nb.benefitspro.core.network.data.model.exceptions
+package com.michael.template.core.network.exceptions
 
 class UnauthorizedException : Exception()
